@@ -9,24 +9,25 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import pro.littleworld.logindemo.model.User
+import pro.littleworld.logindemo.service.Registration
 
 @Composable
-fun RegistrationView() {
+fun LoginView() {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(modifier = Modifier
         .padding(PaddingValues(16.dp))
         .fillMaxWidth()
-        ) {
+    ) {
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
@@ -45,12 +46,11 @@ fun RegistrationView() {
                 .padding(bottom = 8.dp)
         )
         Button(onClick = {
-           val user =  User(username, password)
-            pro.littleworld.logindemo.service.Registration.register(user)
-            println(user)
+            val user =  User(username, password)
+            Registration.login(user)
 
         }) {
-            Text("Register")
+            Text("Login")
         }
     }
 }
