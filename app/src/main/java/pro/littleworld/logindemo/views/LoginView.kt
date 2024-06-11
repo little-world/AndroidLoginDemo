@@ -18,27 +18,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import pro.littleworld.logindemo.model.User
 import pro.littleworld.logindemo.service.Registration
+import pro.littleworld.logindemo.viewmodel.UserViewModel
 
 @Composable
-fun LoginView() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
+fun LoginView(viewModel: UserViewModel) {
     Column(modifier = Modifier
         .padding(PaddingValues(16.dp))
         .fillMaxWidth()
     ) {
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
+            value = viewModel.user.name,
+            onValueChange = { viewModel.updateUsername(it) },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         )
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.user.password,
+            onValueChange = { viewModel.updatePassword(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
@@ -46,8 +44,7 @@ fun LoginView() {
                 .padding(bottom = 8.dp)
         )
         Button(onClick = {
-            val user =  User(username, password)
-            Registration.login(user)
+            viewModel.login()
 
         }) {
             Text("Login")

@@ -1,60 +1,45 @@
 package pro.littleworld.logindemo.service
 
-import android.util.Log
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import pro.littleworld.logindemo.model.User
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RegistrationService {
     @POST("register")
-    fun register(@Body user: User): Call<User>
+    suspend fun register(@Body user: User): User
+
     @POST("login")
-    fun login(@Body user: User): Call<User>
+    suspend fun login(@Body user: User): User
+
+    @GET("hi")
+    suspend fun greet(): User
 
 }
 
 object Registration {
-    val registrationService: RegistrationService = HttpClientService.retrofit.create(RegistrationService::class.java)
+    val registrationService: RegistrationService =
+        HttpClientService.retrofit.create(RegistrationService::class.java)
 
-    fun register(user: User) {
-        registrationService.register(user).enqueue(
-            object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: retrofit2.Response<User>) {
-                    if (response.isSuccessful) {
-                        // Handle success
-                        Log.d("Register", "Success: ${response.body()}")
-                    } else {
-                        // Handle request errors depending on status code
-                        Log.d("Register", "Error: ${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    // Handle failure, e.g., network error or JSON parsing error
-                    Log.d("Register", "Failure", t)
-                }
-            })
+    fun register(user: User): Flow<Result<User>> = flow {
+        emit(Result.success(registrationService.register(user)))
+    }.catch { e ->
+        emit(Result.failure(e))
     }
 
-    fun login(user: User) {
-        registrationService.login(user).enqueue(
-            object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: retrofit2.Response<User>) {
-                    if (response.isSuccessful) {
-                        // Handle success
-                        Log.d("Login", "Success: ${response.body()}")
-                    } else {
-                        // Handle request errors depending on status code
-                        Log.d("Login", "Error: ${response.code()},  ${response.errorBody()?.string()}")
-                    }
-                }
+    fun login(user: User): Flow<Result<User>> = flow {
+        HttpClientService.updateCredentials(user.name, user.password)
+        emit(Result.success(registrationService.login(user)))
+    }.catch { e ->
+        emit(Result.failure(e))
+    }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    // Handle failure, e.g., network error or JSON parsing error
-                    Log.d("Upload", "Failure", t)
-                }
-            })
+    fun greet(): Flow<Result<User>> = flow {
+        emit(Result.success(registrationService.greet()))
+    }.catch { e ->
+        emit(Result.failure(e))
     }
 }

@@ -1,6 +1,6 @@
 package pro.littleworld.logindemo.model
 
-data class User (
-    val name: String,
-    val password : String
+data class  User (
+    var name: String,
+    var password : String
 )

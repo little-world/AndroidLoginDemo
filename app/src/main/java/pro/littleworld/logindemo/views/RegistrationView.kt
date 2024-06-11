@@ -2,7 +2,6 @@ package pro.littleworld.logindemo.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -16,28 +15,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import pro.littleworld.logindemo.model.User
+import pro.littleworld.logindemo.viewmodel.UserViewModel
 
 @Composable
-fun RegistrationView() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun RegistrationView(viewModel: UserViewModel) {
 
     Column(modifier = Modifier
         .padding(PaddingValues(16.dp))
         .fillMaxWidth()
         ) {
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
+            value = viewModel.user.name,
+            onValueChange = { viewModel.updateUsername(it) },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         )
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.user.password,
+            onValueChange = { viewModel.updatePassword(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
@@ -45,9 +42,8 @@ fun RegistrationView() {
                 .padding(bottom = 8.dp)
         )
         Button(onClick = {
-           val user =  User(username, password)
-            pro.littleworld.logindemo.service.Registration.register(user)
-            println(user)
+           viewModel.register()
+            println( )
 
         }) {
             Text("Register")

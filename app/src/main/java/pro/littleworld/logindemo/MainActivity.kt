@@ -18,12 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pro.littleworld.logindemo.ui.theme.LoginDemoTheme
+import pro.littleworld.logindemo.viewmodel.UserViewModel
 import pro.littleworld.logindemo.views.DataView
 import pro.littleworld.logindemo.views.LoginView
 import pro.littleworld.logindemo.views.RegistrationView
+import pro.littleworld.logindemo.views.WebsocketView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val userViewModel = UserViewModel()
         super.onCreate(savedInstanceState)
         setContent {
             LoginDemoTheme {
@@ -33,33 +37,16 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
-                        RegistrationView()
+                        RegistrationView(userViewModel)
                         HorizontalDivider(thickness = 1.dp, color = Color.Black)
-                        LoginView()
+                        LoginView(userViewModel)
                         HorizontalDivider(thickness = 1.dp, color = Color.Black)
                         DataView()
-
+                        HorizontalDivider(thickness = 1.dp, color = Color.Black)
+                        WebsocketView()
                     }
-
-
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LoginDemoTheme {
-        Greeting("Android")
     }
 }

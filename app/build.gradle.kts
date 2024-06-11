@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "pro.littleworld.logindemo"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -68,7 +68,18 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
+
+    // retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // websockets
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+// https://mvnrepository.com/artifact/com.github.NaikSoftware/StompProtocolAndroid
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+
+
+
 
 }
